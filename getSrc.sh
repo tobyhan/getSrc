@@ -8,6 +8,8 @@ if [ ! -f ${lockfile} ];then
   echo $$ > ${lockfile}
 else
   echo "Locked by other mission! Please check ${lockfile} and remove it!"
+  echo -n 'Press any key to continue: '
+  read -n 1
   exit 1;
 fi
 
@@ -39,13 +41,14 @@ if [ ! -d ${getSrcDir} ];then
 else
   echo 'New backup directory exist. Compress it now......'
   archiveTime=$(date "+%Y%m%d%H%M%S")
+  # tar cvzf mydata.tar.gz mydata/
   echo "tar cvzf ${archiveTime}.tar.gz ${getSrcDir}"
   eval "tar cvzf ${archiveTime}.tar.gz ${getSrcDir}"
 fi
 
 echo ''
 echo '############ Unlock #############'
-if [ -f "lockfile" ];then
+if [ -f ${lockfile} ];then
   echo 'Release new lock file now......'
   echo "rm ${lockfile}"
   eval "rm ${lockfile}"
